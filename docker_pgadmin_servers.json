@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "chat",
+      "Group": "Databases",
+      "Port": 5431,
+      "Username": "chat",
+      "Host": "localhost",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "chat",
+      "Password": "chat1234"
+    }
+  }
+}
+

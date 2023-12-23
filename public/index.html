@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+<input type="text" id="receiverId" placeholder="Receiver ID">
+<input type="text" id="messageInput" placeholder="Type a message...">
+<button onclick="sendMessage()">Send</button>
+<ul id="messages"></ul>
+<button onclick="createChat()">Send</button>
+
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRqb2tpYyIsInN1YiI6IjU1NTBlOWQ1LTIzYWMtNDFkOC05ODg4LTI5ODllZDAwNjAyNCIsImlhdCI6MTcwMzM3MjYxOSwiZXhwIjoxNzAzNDAxNDE5fQ.2L5ovF0SYr8vgowHo-WyShWh6hWbNvSMjggPx3YBns8';
+
+  const socket = io('http://localhost:9001',{
+    auth: {
+      token: `Bearer ${token}`
+    }
+  }); // Your server URL
+
+  socket.on('getChats', function(msg) {
+    console.log(msg);
+    var item = document.createElement('li');
+    item.textContent = `From ${msg.senderId}: ${msg.message}`;
+    messages.appendChild(item);
+  });
+  function createChat() {
+    socket.emit('createChat', { users: ['8c60a1f0-943b-4e9d-b277-4ed688bceb11','5550e9d5-23ac-41d8-9888-2989ed006024'] });
+
+  }
+  function sendMessage() {
+    var receiverId = document.getElementById('receiverId').value;
+    var message = document.getElementById('messageInput').value;
+    socket.emit('getChats', { senderId: socket.id, receiverId: receiverId, message: message });
+    document.getElementById('messageInput').value = '';
+  }
+</script>
+</body>
+</html>
